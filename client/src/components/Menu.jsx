@@ -1,7 +1,22 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Menu = () => {
+const Menu = ({cat}) => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/posts/?cat=${cat}`);
+        setPosts(res.data)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [cat]);
+  /*
   const posts = [
     {
       id: 1,
@@ -22,13 +37,14 @@ const Menu = () => {
       image: "https://picsum.photos/id/48/200/300"
     }
   ]
+  */
   return (
     <div className='menu'>
       <h2>Other posts you may like</h2>
       {posts.map((post) => (
         <div className="post" key={post.id}>
           <Link to={`/post/${post.id}`}>
-            <img src={post.image} alt="" />
+            <img src={post?.image} alt="" />
             <h3>{post.title}</h3>
             <button>Read More</button>
           </Link>

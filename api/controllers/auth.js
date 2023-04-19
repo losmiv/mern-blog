@@ -51,7 +51,7 @@ export const login = (req, res) => {
             return res.status(400).json("Invalid username or password");
         }
 
-        const token = jwt.sign({id: data[0].id}, "jwtkey"); // jwtkey is weak secret key
+        const token = jwt.sign({ id: data[0].id }, "jwtkey"); // jwtkey is weak secret key
         const { password, ...other } = data[0]; // separate password from rest of data
 
         res
@@ -64,5 +64,9 @@ export const login = (req, res) => {
 };
 
 export const logout = (req, res) => {
-
-}
+    
+    res.clearCookie("access.token", {
+        sameSite: "none",
+        secure: true
+    }).status(200).json("User has been logged out");
+};
